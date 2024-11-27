@@ -5,34 +5,32 @@ import math
 x = np.array([92, 56, 88, 70, 80, 49, 65, 35, 66, 67])
 y = np.array([98, 68, 81, 80, 83, 52, 66, 30, 68, 73])
 
-def gradient_descent(x, y):
-    w, b = 0, 0
-    iterations = 1000
-    n = len(x)
-    learning_rate = 0.0001
-    cost_previous = 0
+def G(X,y_actual,lr,n_iters):
+  w,b = 0,0
+  n = len(X)
+  prev_cost = 0
 
-    for i in range(iterations):
-        y_predict = w * x + b
-        cost_function = (1 / n) * sum((value ** 2) for value in (y - y_predict))
-        wd = -(2 / n) * sum(x * (y - y_predict))
-        bd = -(2 / n) * sum(y - y_predict)
-        m -= learning_rate * wd
-        b -= learning_rate * bd
+  for i in range(n_iters):
+    y_pred = X * w + b
+    cost_func = (1/ n) * np.sum((y_pred - y_actual)**2) 
+    dw = (1/n) * np.dot(X.T,(y_pred - y_actual))
+    db = (1/n) * np.sum(y_pred - y_actual)
 
-        if math.isclose(cost_function, cost_previous, rel_tol=1e-09, abs_tol=0.0):
-            break
-        
+    w -= lr * dw
+    b -= lr * db
 
-        cost_previous = cost_function
-        print(f'm({w}), b({b}), i({i}), cost({cost_function})')
+    if math.isclose(cost_func,prev_cost,rel_tol=1e-09,abs_tol=0.0):
+      break
 
-    return m, b
+    prev_cost = cost_func
+    print(f'w({w}), b({b}), i({i}), cost({cost_func})')
+      
+  return w,b 
 
 if __name__ == "__main__":
-    w, b = gradient_descent(x, y)
-    print(f'Coef {w} Intercept {b}')
-    #
-    
-#Stochastic GD
+    w, b = G(x, y,0.0001,1000)
+    print(f'Coef {w:.4f} Intercept {b:.4f}')
+
+ 
+
     
